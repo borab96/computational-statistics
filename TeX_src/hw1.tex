@@ -1,0 +1,140 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage[margin=2.5cm,headheight=15pt]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{amsfonts}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{slashed}
+\usepackage{pdfpages}
+\usepackage{braket}
+\usepackage{color}
+\usepackage{bbm}
+\usepackage{float}
+%\usepackage{tikz}
+\usepackage{tensor}
+\usepackage{amsthm}
+\newtheorem{corollary}{Corollary}
+\newtheorem{prop}{Proposition}
+
+\newcommand{\CLASS}{STAT 525}
+\newcommand{\HWNO}{1}
+
+
+\newcommand{\mathsym}[1]{{}}
+\newcommand{\unicode}[1]{{}}
+\newcommand{\prt}{\partial}
+\newcommand{\ID}{\ensuremath{\mathbbm{1}}}
+\newcommand{\lag}{\mathcal{L}}
+\newcommand{\EQ}{&=}
+\newcommand{\COMMENT}[1]{\textcolor{red}{[#1]}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\DK}{\frac{d^4k}{(2 \pi)^4}}
+\newcommand{\DDK}{\frac{d^dk}{(2 \pi)^d}}
+\newcommand{\DP}{\frac{d^4p}{(2 \pi)^4}}
+\newcommand{\DDP}{\frac{d^dp}{(2 \pi)^d}}
+%\usepackage{csc}
+\pagestyle{fancy}
+\fancyhead[L]{Bora Basa | \today}
+\fancyhead[R]{\CLASS HW \HWNO}
+\title{Problem Set \HWNO}
+\author{Bora Basa}
+
+\usepackage{hyperref}
+\begin{document}
+% \begin{titlepage}
+%     \setlength{\parindent}{0pt}
+%     \vspace*{-3.8\baselineskip}
+%     \CLASS
+%     \begin{center}
+%     \vspace{.1\textheight}
+%     {\huge\bfseries Probem Set \HWNO \par}
+%     \bigbreak
+%     {\bfseries\large Bora Basa\par}
+%     \bigbreak
+%     \today
+% \end{center}
+% \end{titlepage}
+%-------------------------------------------------------------------%
+\begin{enumerate}
+    \item \begin{enumerate}
+        \item The set $A:=\{x\in\mathbb R^2| x_1+i^2x_2\leq 1, i=1,...,10\}$ is convex.
+        \begin{proof}
+            $\partial A\subset \mathbb R^2$ is a line so $A$ must be convex. Here's the brute force proof:\\ 
+            Take points $x$ and $y$ in $A$. $A$ is convex if the convex combination of these points,
+            $$
+                xt+(1-t)y,\quad t\in[0,1]
+            $$
+            remains in $A$ $\forall x,y\in A$. Impose the constraints
+            \begin{align*}
+            tx_1+i^2tx_2&\leq t\\
+            (t-1)y_1+i^2(t-1)y_2&\leq (1-t)
+            \end{align*}
+            and add:
+            \begin{align*}
+            tx_1+ty_1-y_1+i^2(tx_2+ty_2-y_2)&\leq 1\\
+            tx_1+i^2tx_2-y_1-i^2y_2+ty_1+i^2ty_2&\leq 1\\
+            tx-y+ty\leq 1\\
+            tx+(1-t)y\leq 1
+            \end{align*}
+            This is a special case of the following (also obvious) fact $\{x\in\mathbb R^n|a_ix^i\leq b\}$ $\forall a\in\mathbb R^{n}$, $b\in \mathbb R$.
+        \end{proof}
+        \item  The set $B:=\{x\in\mathbb R^2| x_1^2+2ix_1+i^2x_2^2\leq 1, i=1,...,10\}$ is convex.
+         \begin{proof}
+            The constraint can be written as 
+            $$
+            (x_1+ix_2)^2\leq 1\implies -1\leq(x_1+ix_2)\leq 1.
+            $$
+            Either constraint leads to a convex set due to part (a). Since the intersection of two convex sets is convex, $B$ is convex.
+        \end{proof}
+        \item  The set $C:=\{x\in\mathbb R^2| x_1^2+5x_1x_2+4x_2^2\leq 1, i=1,...,10\}$ is not convex.
+        \begin{proof}
+            $\partial C=\{x\in\mathbb R^2|  \underbrace{x_1^2+5x_1x_2+4x_2^2-1}_f=0\}$. 
+            
+            Recall that $f\in C^2(\Omega)$ is convex in $\Omega$ iff $\text{Hess}f\geq 0$. Further, recall that a convex set is bounded by a convex curve. Then, we only need to prove that the boundary of $C$ is not a convex curve by showing $\text{Hess}f<0$.
+            $$
+            \text{Hess}f = 
+            \begin{pmatrix}
+                2 & 5 \\
+                 5& 4 
+                \end{pmatrix}
+            $$
+            has eigenvalues $\{4 + \sqrt{34}, 4 - \sqrt{34}\}$, the latter of which is negative.
+        \end{proof}
+        \item The set $D:=\{x\in\mathbb R^d| \sum_ix_i^2=1 \}$ is not convex.
+        \begin{proof}
+            This is $S^{d-1}\hookrightarrow\mathbb R^{d}$. The sphere is obviously not convex in $\mathbb R^d$. By counterexample (or triangle inequality in general), 
+            \begin{align*}
+                xt+(1-t)y\big\vert_{t=1/2}=\frac{x+y}{2}
+            \end{align*}
+            which has norm $\sqrt{2}/2$ and hence is outside $D$.
+
+        \end{proof}
+    \end{enumerate}
+    \item \begin{enumerate}
+        \item We have
+        $$\text{Hess}\frac{x^2}{y} =  \begin{pmatrix}
+            \frac{2}{y} & -\frac{2x}{y} \\
+             \frac{-2x}{y^2}& \frac{2 x^2}{y^3} 
+            \end{pmatrix}$$
+            which has eigenvalues
+            $$
+            \left\{0,\frac{2(x^2+y^2)}{y^3} \right\}\geq 0\text{ on }y>0 
+            $$
+            so the function is convex. 
+        \item We have
+        $$
+        \text{Hess}\log\left(e^{x}+e^{y}\right) =  
+\begin{pmatrix}
+         \frac{e^{x+y}}{\left(e^x+e^y\right)^2} & -\frac{e^{x+y}}{\left(e^x+e^y\right)^2} \\
+         -\frac{e^{x+y}}{\left(e^x+e^y\right)^2} & \frac{e^{x+y}}{\left(e^x+e^y\right)^2} \\
+\end{pmatrix}
+        $$
+        which has eigenvalues
+            $$
+            \left\{0,\frac{2 e^{x+y}}{\left(e^x+e^y\right)^2} \right\}\geq 0\text{ on }\mathbb R^2
+            $$
+            so the function is convex.
+    \end{enumerate}
+\end{enumerate}
+\end{document}
