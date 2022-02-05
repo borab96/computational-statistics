@@ -136,5 +136,84 @@
             $$
             so the function is convex.
     \end{enumerate}
+    \item \begin{enumerate}
+        \item I'm having a hard time interpreting the parameters of the problem. I'm going to assume what you have in mind is some sort of affine ReLu with a penalty term. Here's my formulation of the problem:
+        
+        Let $f:\mathbb R^n\to\mathbb R^n$ be the map 
+        $$
+        f(x; b)=\max(0, Ax+b)+\rho\|x\|^2
+        $$
+        The function $\max (0, g(x))$ is non-differentiable at $0= g(x)$. Otherwise, the unique subgradients are either $0$ or $\nabla g$. At the non-differentiable point
+        $$
+        \partial\max(0, g(x)) =\text{conv} (0\cup \nabla g)=\{\alpha \nabla g:\alpha\in[0,1]\}
+        $$
+        The function $\rho\|x\|^2$ is differentiable so the subgradient is simply 
+        \begin{align*}
+            \rho \nabla \|x\|^2&=\rho\nabla_x (x^T\mathbb I x)\\
+            &=2\rho\mathbb I x.
+        \end{align*}
+        Putting these together, the sub-differential wrt $x$ is
+        $$
+        \partial_x f(x;b) =\left\{ \begin{array}{ll}
+            \{\alpha A^T+2\rho\mathbb I x:\alpha\in[0, 1]\} &\quad Ax+b=0\\
+           \{2\rho \mathbb I x\} &\quad Ax+b< 0\\
+           \{A^T+2\rho\mathbb I x\} &\quad Ax+b>0 
+       \end{array} \right.
+        $$
+        Similarly,
+        $$
+        \partial_b f(x;b) =\left\{ \begin{array}{ll}
+            \{\alpha \vec 1:\alpha\in[0, 1]\} &\quad Ax+b=0\\
+           \{\vec 0\} &\quad Ax+b< 0\\
+           \{\vec 1\} &\quad Ax+b>0 
+       \end{array} \right.
+        $$
+        \item $\partial \|x\|=\{x/\|x\|\}$ if $x\neq 0$. Else $\partial \|x\|=\{\|x\|\leq 1\}$
+    \begin{proof}
+        When $x\neq 0 $ the function is differentiable. Then, the subgradient is determined uniquely by the gradient:
+        $$
+        \partial f(x\neq 0)=\nabla \|x\| = \frac{x}{\|x\|}= \text{sign }x.
+        $$
+        When $x=$ the function is non-differentiable. Thus, we seek the set of $g\in\mathbb R^n$ s.t.
+        $$
+        \|y\|-\|x\|\geq ( g, y-x)\quad \forall y\in\mathbb R^n
+        $$
+        which can be logically decomposed into
+        $$
+        \|y\|\geq (g,y)\text{ and }\|x\|\geq (g,x).
+        $$
+        A subgradient, $g$, satisfies these inequalities if $\|g\|\leq 1$. Hence,
+        the subdifferential of $f(x) = \|x\|$ is
+        $$
+        \partial f(x) =\left\{ \begin{array}{ll}
+             \{x\in\mathbb R^n:\|x\|\leq 1\} &\quad x=0\\
+            \{\frac{x}{\|x\|}\} &\quad x\neq 0 
+        \end{array} \right.
+        $$
+        
+    \end{proof}
+    \end{enumerate}
 \end{enumerate}
 \end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+Let's compute the subdifferential of $f(w,b) = \max(0, g(w, b))+\rho\|w\|^2$.
+            The function $\max (0, g(w, b))$ is non-differentiable at $0= g(w,b)$. Otherwise, the unique subgradients are either 0 or $\nabla g$. Then, at the non-differentiable point
+            $$
+            \partial\max(0, g(w,b)) =\text{conv} (0\cup \nabla g(w,b))=\{\alpha \nabla g(w,b):\alpha\in[0,1]\}
+            $$
+            Combined, at the non-differentiable point,
+            $$
+            \partial f= \{\alpha \nabla g(w,b)+2\rho w:\alpha\in[0,1]\}
+            $$
+        \item 
