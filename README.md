@@ -1,2 +1,3 @@
 # computational-statistics
- STAT 525 spring 2022
+ 
+ Collection of notebooks implementing statistical algorithms from scratch. Some based on STAT 525 HWs at UIUC.
