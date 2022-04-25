@@ -20,7 +20,7 @@
  - Fractional gradient descent 
  - TODO: Genetic algorithms
  
- **Clustering algorithms:**
+ **[Clustering algorithms:](https://nbviewer.org/github/borab96/computational-statistics/tree/main/ML-Algs/clustering)**
  
  - K-means
  - TODO: Hierarchical clustering - this is kind of a pain to implement...
