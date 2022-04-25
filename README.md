@@ -1,4 +1,6 @@
-# computational-statistics
+<h1 align="center">Computational statistics</h1>
+<p align="center">Algorithms and applications</p>
+
  
  [Collection of notebooks](https://nbviewer.org/github/borab96/computational-statistics/tree/main/) implementing statistical algorithms from scratch. Written in R or python
  
@@ -23,7 +25,7 @@
  
  **[Clustering algorithms:](https://nbviewer.org/github/borab96/computational-statistics/tree/main/ML-Algs/clustering)**
  
- - [Convex-clustering](https://nbviewer.org/github/borab96/computational-statistics/blob/main/ML-Algs/clustering/k_means.ipynb)
+ - [Flat-clustering](https://nbviewer.org/github/borab96/computational-statistics/blob/main/ML-Algs/clustering/k_means.ipynb)
      - K-means
      - Canopy
  - TODO: Hierarchical clustering - this is kind of a pain to implement...
