@@ -14,7 +14,7 @@
  - TODO: Stochastic gradient descent
  - TODO: Stochastic variance reduced gradient descent
  
- **Non-convex programming algorithms:**
+ **[Non-convex programming algorithms](https://nbviewer.org/github/borab96/computational-statistics/tree/main/GD/NonConvex):**
  
  - TODO: Quantum and thermal annealing
  - Fractional gradient descent 
@@ -30,6 +30,6 @@
  **[Applications to statistical learning](https://nbviewer.org/github/borab96/computational-statistics/tree/main/ML-Algs/):**
  
  - Matrix completion
- - l<sub>1</sub> mean-filtering (total-variation denoising)
+ - *l*<sub>1</sub> mean-filtering (total-variation denoising)
  - PCA
  - AdaBoost
