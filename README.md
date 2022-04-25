@@ -2,7 +2,7 @@
  
  Collection of notebooks implementing statistical algorithms from scratch. Some based on STAT 525 HWs at UIUC.
  
- Convex programming algorithms implemented:
+ Convex programming algorithms:
  
  - Vanilla gradient descent
  - Projected gradient descent
@@ -14,9 +14,21 @@
  - TODO: Stochastic gradient descent
  - TODO: Stochastic variance reduced gradient descent
  
+ Non-convex programming algorithms:
+ 
+ - TODO: Quantum and thermal annealing
+ - Fractional gradient descent 
+ - TODO: Genetic algorithms
+ 
+ Clustering:
+ 
+ - K-means
+ - TODO: Hierarchical clustering
+ - Canopy clustering
+ 
  Applications:
  
  - Matrix completion
- - $l_1$ mean-filtering (total-variation denoising)
+ - l<sub>1</sub> mean-filtering (total-variation denoising)
  - PCA
  - AdaBoost
