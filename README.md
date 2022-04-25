@@ -1,8 +1,8 @@
 # computational-statistics
  
- Collection of notebooks implementing statistical algorithms from scratch. Some based on STAT 525 HWs at UIUC.
+ Collection of notebooks implementing statistical algorithms from scratch. Written in R or python
  
- Convex programming algorithms:
+ **Descent algorithms:**
  
  - Vanilla gradient descent
  - Projected gradient descent
@@ -14,19 +14,20 @@
  - TODO: Stochastic gradient descent
  - TODO: Stochastic variance reduced gradient descent
  
- Non-convex programming algorithms:
+ **Non-convex programming algorithms:**
  
  - TODO: Quantum and thermal annealing
  - Fractional gradient descent 
  - TODO: Genetic algorithms
  
- Clustering:
+ **Clustering algorithms:**
  
  - K-means
- - TODO: Hierarchical clustering
+ - TODO: Hierarchical clustering - this is kind of a pain to implement...
+ - TODO: DBSCAN
  - Canopy clustering
  
- Applications:
+ **Applications to statistical learning:**
  
  - Matrix completion
  - l<sub>1</sub> mean-filtering (total-variation denoising)
