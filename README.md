@@ -1,6 +1,6 @@
 # computational-statistics
  
- [Collection of notebooks]((https://nbviewer.org/github/borab96/computational-statistics/tree/main/)) implementing statistical algorithms from scratch. Written in R or python
+ [Collection of notebooks](https://nbviewer.org/github/borab96/computational-statistics/tree/main/) implementing statistical algorithms from scratch. Written in R or python
  
  **[Descent algorithms](https://nbviewer.org/github/borab96/computational-statistics/tree/main/GD/):**
  
