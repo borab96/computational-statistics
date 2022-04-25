@@ -37,3 +37,11 @@
  - [*l*<sub>1</sub> mean-filtering (total-variation denoising)](https://nbviewer.org/github/borab96/computational-statistics/blob/main/ML-Algs/total_variation_denoising_R.ipynb)
  - [PCA](https://nbviewer.org/github/borab96/computational-statistics/blob/main/ML-Algs/PCA.ipynb)
  - [AdaBoost](https://nbviewer.org/github/borab96/computational-statistics/blob/main/ML-Algs/adaptive_boosting.ipynb)
+ 
+**[Random matrix theory](https://nbviewer.org/github/borab96/computational-statistics/tree/main/RMT/)
+
+- [Sampling and spectral stats](https://nbviewer.org/github/borab96/computational-statistics/blob/main/RMT/RMT_basics.ipynb)
+- [Point processes](https://nbviewer.org/github/borab96/computational-statistics/blob/main/RMT/RMT_processes.ipynb)
+- TODO:filtering
+
+ 
