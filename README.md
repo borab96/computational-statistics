@@ -23,14 +23,15 @@
  
  **[Clustering algorithms:](https://nbviewer.org/github/borab96/computational-statistics/tree/main/ML-Algs/clustering)**
  
- - K-means
+ - [Convex-clustering](https://nbviewer.org/github/borab96/computational-statistics/blob/main/ML-Algs/clustering/k_means.ipynb)
+     - K-means
+     - Canopy
  - TODO: Hierarchical clustering - this is kind of a pain to implement...
  - TODO: DBSCAN
- - Canopy clustering
  
  **[Applications to statistical learning](https://nbviewer.org/github/borab96/computational-statistics/tree/main/ML-Algs/):**
  
- - Matrix completion
- - *l*<sub>1</sub> mean-filtering (total-variation denoising)
- - PCA
- - AdaBoost
+ - [Matrix completion](https://nbviewer.org/github/borab96/computational-statistics/blob/main/ML-Algs/matrix_completion_R.ipynb)
+ - [*l*<sub>1</sub> mean-filtering (total-variation denoising)](https://nbviewer.org/github/borab96/computational-statistics/blob/main/ML-Algs/total_variation_denoising_R.ipynb)
+ - [PCA](https://nbviewer.org/github/borab96/computational-statistics/blob/main/ML-Algs/PCA.ipynb)
+ - [AdaBoost](https://nbviewer.org/github/borab96/computational-statistics/blob/main/ML-Algs/adaptive_boosting.ipynb)
