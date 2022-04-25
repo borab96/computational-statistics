@@ -1,8 +1,8 @@
 # computational-statistics
  
- Collection of notebooks implementing statistical algorithms from scratch. Written in R or python
+ [Collection of notebooks]((https://nbviewer.org/github/borab96/computational-statistics/tree/main/)) implementing statistical algorithms from scratch. Written in R or python
  
- **Descent algorithms:**
+ **[Descent algorithms](https://nbviewer.org/github/borab96/computational-statistics/tree/main/GD/):**
  
  - Vanilla gradient descent
  - Projected gradient descent
@@ -27,7 +27,7 @@
  - TODO: DBSCAN
  - Canopy clustering
  
- **Applications to statistical learning:**
+ **[Applications to statistical learning](https://nbviewer.org/github/borab96/computational-statistics/tree/main/ML-Algs/):**
  
  - Matrix completion
  - l<sub>1</sub> mean-filtering (total-variation denoising)
