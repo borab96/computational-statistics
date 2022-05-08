@@ -14,13 +14,15 @@
      - Coordinate descent
      - ADMM
      - Dual proximal gradient descent
- - TODO: Stochastic gradient descent
- - TODO: Stochastic variance reduced gradient descent
+ - [Stochastic optimization](https://nbviewer.org/github/borab96/computational-statistics/blob/main/GD/StochasticLogisticRegression.ipynb)
+   - Stochastic gradient descent
+   - Stochastic variance reduced gradient descent
  
  **[Non-convex programming algorithms](https://nbviewer.org/github/borab96/computational-statistics/tree/main/GD/NonConvex):**
  
  - TODO: Quantum and thermal annealing
  - [Fractional gradient descent](https://nbviewer.org/github/borab96/computational-statistics/blob/main/GD/NonConvex/FractionalGD.ipynb)
+ - [Dictionary recovery](https://github.com/borab96/computational-statistics/tree/main/GD/NonConvex) [Block coordinate descent](https://nbviewer.org/github/borab96/computational-statistics/blob/main/GD/NonConvex/DictionaryRecovery.ipynb)
  - TODO: Genetic algorithms
  
  **[Clustering algorithms:](https://nbviewer.org/github/borab96/computational-statistics/tree/main/ML-Algs/clustering)**
