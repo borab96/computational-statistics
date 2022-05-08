@@ -22,7 +22,7 @@
  
  - TODO: Quantum and thermal annealing
  - [Fractional gradient descent](https://nbviewer.org/github/borab96/computational-statistics/blob/main/GD/NonConvex/FractionalGD.ipynb)
- - [Dictionary recovery](https://github.com/borab96/computational-statistics/tree/main/GD/NonConvex) [Block coordinate descent](https://nbviewer.org/github/borab96/computational-statistics/blob/main/GD/NonConvex/DictionaryRecovery.ipynb)
+ - [Dictionary recovery](https://github.com/borab96/computational-statistics/tree/main/GD/NonConvex/dictionary_recovery.pdf) [Block coordinate descent](https://nbviewer.org/github/borab96/computational-statistics/blob/main/GD/NonConvex/DictionaryRecovery.ipynb)
  - TODO: Genetic algorithms
  
  **[Clustering algorithms:](https://nbviewer.org/github/borab96/computational-statistics/tree/main/ML-Algs/clustering)**
