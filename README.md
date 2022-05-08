@@ -22,7 +22,7 @@
  
  - TODO: Quantum and thermal annealing
  - [Fractional gradient descent](https://nbviewer.org/github/borab96/computational-statistics/blob/main/GD/NonConvex/FractionalGD.ipynb)
- - [Dictionary recovery](https://github.com/borab96/computational-statistics/tree/main/GD/NonConvex/dictionary_recovery.pdf) [Block coordinate descent](https://nbviewer.org/github/borab96/computational-statistics/blob/main/GD/NonConvex/DictionaryRecovery.ipynb)
+ - [Block coordinate descent](https://nbviewer.org/github/borab96/computational-statistics/blob/main/GD/NonConvex/DictionaryRecovery.ipynb)
  - TODO: Genetic algorithms
  
  **[Clustering algorithms:](https://nbviewer.org/github/borab96/computational-statistics/tree/main/ML-Algs/clustering)**
@@ -39,6 +39,7 @@
  - [*l*<sub>1</sub> mean-filtering (total-variation denoising)](https://nbviewer.org/github/borab96/computational-statistics/blob/main/ML-Algs/total_variation_denoising_R.ipynb)
  - [PCA](https://nbviewer.org/github/borab96/computational-statistics/blob/main/ML-Algs/PCA.ipynb)
  - [AdaBoost](https://nbviewer.org/github/borab96/computational-statistics/blob/main/ML-Algs/adaptive_boosting.ipynb)
+ - [Dictionary learning (pdf)](https://github.com/borab96/computational-statistics/tree/main/GD/NonConvex/dictionary_recovery.pdf)
  
 **[Random matrix theory](https://nbviewer.org/github/borab96/computational-statistics/tree/main/RMT/):**
 
