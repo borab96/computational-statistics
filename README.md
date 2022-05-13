@@ -47,4 +47,8 @@
 - [Point processes](https://nbviewer.org/github/borab96/computational-statistics/blob/main/RMT/RMT_processes.ipynb)
 - TODO:filtering
 
+**[Time series and SDEs](https://nbviewer.org/github/borab96/computational-statistics/tree/main/TimeSeries/):**
+- [Singular spectrum analysis](https://nbviewer.org/github/borab96/computational-statistics/blob/main/TimeSeries/BasicSSA.ipynb)
+- [Runge-Kutta SDE solver using numba](https://nbviewer.org/github/borab96/computational-statistics/blob/main/TimeSeries/RungeKuttaSDE.ipynb)
+
  
