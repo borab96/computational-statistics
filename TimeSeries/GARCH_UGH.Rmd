@@ -1,0 +1,271 @@
+---
+title: "GARCH-UGH for VaR estimation"
+output: html_notebook
+author: Bora Basa
+highlighter: prettify
+framework: bootstrap
+mode: selfcontained
+hitheme: twitter-bootstrap
+assets:
+  css:
+    - "http://fonts.googleapis.com/css?family=Raleway:300"
+    - "http://fonts.googleapis.com/css?family=Oxygen"
+---
+
+<style>
+body{
+  font-family: 'Oxygen', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+h1,h2,h3,h4 {
+  font-family: 'Raleway', sans-serif;
+}
+
+.container { width: 1000px; }
+h2, h3 {
+  background-color: #D4DAEC;
+  text-indent: 100px; 
+}
+h4 {
+  text-indent: 100px;
+}
+
+g-table-intro h4 {
+  text-indent: 0px;
+}
+</style>
+
+This is a reproduction of [[1]](https://www.tandfonline.com/doi/full/10.1080/14697688.2022.2048061). A nice introduction to `rugarch` can be found in [[2]](http://www.unstarched.net/r-examples/rugarch/a-short-introduction-to-the-rugarch-package/)
+
+**Abstract**
+
+> The Value-at-Risk (VaR) is a widely used instrument in financial risk management. The question of
+estimating the VaR of loss return distributions at extreme levels is an important question in financial
+applications, both from operational and regulatory perspectives; in particular, the dynamic estimation
+of extreme VaR given the recent past has received substantial attention. We propose here a new twostep bias-reduced estimation methodology for the estimation of one-step ahead dynamic extreme
+VaR, called GARCH-UGH (Unbiased Gomes-de Haan), whereby financial returns are first filtered
+using an AR-GARCH model, and then a bias-reduced estimator of extreme quantiles is applied to
+the standardized residuals. Our results indicate that the GARCH-UGH estimates of the dynamic
+extreme VaR are more accurate than those obtained either by historical simulation, conventional
+AR-GARCH filtering with Gaussian or Student-t innovations, or AR-GARCH filtering with standard
+extreme value estimates, both from the perspective of in-sample and out-of-sample backtestings of
+historical daily returns on several financial time series.
+
+```{r, warning=FALSE, message=FALSE}
+library(latex2exp)
+library(rugarch)
+library(ggplot2)
+library(gridExtra)
+```
+
+
+# AR-GARCH models
+
+The generalized auto-regressive conditional heteroskedasticity model with a single lag is the time series $X_t$:
+$$
+\begin{aligned}
+X_t  &= \mu_t+\varepsilon_t,\quad \varepsilon_t=\sigma_t\xi_t\\
+ \mu_t&=\phi X_{t-1}\\
+\sigma^2_t&=\omega+\alpha (X_{t-1}-\mu_{t-1})+\beta \sigma_{t-1}^2
+\end{aligned}
+$$
+where  $\xi\sim\mathcal N(0,1)$. The mean is dynamically modeled as an AR(1) process as indicated. We denote this model AR(1)-GARCH(1,1). Higher order lags can be incorporated in the obvious way. The resulting series is well defined if $\alpha,\beta\geq 0$, $\omega>0$ and stationary iff $\|\alpha+\beta\|_1<1$.
+
+```{r, fig.width=12, fig.height=4}
+GARCH.sequence <- function( alpha, beta, omega=1, phi=0.8,n.steps=800, var.init=1, mu.init=0.1, X.init=0.1)
+{
+    vars <- numeric(length=n.steps)
+    X <- numeric(length=n.steps)
+    mu <- numeric(length=n.steps)
+    vars[1] <- var.init
+    mu[1] <- mu.init
+    X.init <- X.init
+    for(i in seq(1+1, n.steps-1))
+    {
+        mu[i] <- X[i-1]*phi
+        vars[i] <- omega+alpha*(X[i-1]-mu[i-1])**2+beta*vars[i-1]
+        X[i] <- mu[i]+sqrt(vars[i])*rnorm(1)
+    }
+    return(list(variance=vars, X=X))
+}
+series <- GARCH.sequence( alpha=0.25, beta=0.75, omega=1)
+par(mfrow=c(1,2))
+plot(sqrt(series$variance), type='l', ylab=TeX(r"($\sigma_t$)"))
+plot(series$X, type='l', ylab="AR(1)-GARCH(1,1)")
+```
+The noise process $\xi_t$ is typically referred to as the innovation. We took it to be Gaussian but one usually wants to be able to model fat tails. 
+
+
+
+
+## Fitting
+
+Let's fit the adjusted log-returns of BMW with an AR(1)-GARCH(1,1) model.
+
+```{r}
+data(bmw, package='evir')
+plot(bmw, type='l', ylab=TeX(r"($\log( P_t/P_{t-1})$)"))
+```
+
+```{r}
+ar.garch <- ugarchspec(mean.model = list(armaOrder=c(1,0)), variance.model = list(garchOrder=c(1,1)))
+ar.garch
+```
+
+
+```{r}
+model.fit <- ugarchfit(data=bmw, spec=ar.garch, out.sample = 50)
+show(model.fit)
+```
+Notably, the Adjusted Pearson Goodness-of-Fit Test strongly rejects the null hypothesis that the innovation process is Gaussian. One can show that a t-distribution does better (and standardizes the residuals). We now forecast the mean log-return and the volatility:
+
+```{r, fig.width=6, fig.height=6}
+model.forecast = ugarchforecast(model.fit, n.ahead=10, n.roll=5)
+plot(model.forecast,which="all")
+```
+To be specific, the forecasts are obtained from the update
+$$
+\hat \mu_{t+1} = \hat \phi X_t,\quad \hat \sigma_{t+1}=\pm\sqrt{\hat\omega+\hat\alpha(X_t-\mu_t)^2+\hat\beta\hat\sigma_t^2}
+$$
+The residual is given by 
+$$
+\hat\xi_t=\frac{X_t-\hat\mu_t}{\hat\sigma_t}
+$$
+
+Before proceeding, let us wrap some of this analysis up in a function.
+
+```{r}
+get.estimates <- function(series, window, model.spec=ar.garch, out.sample=0)
+{
+    n <- length(series)
+    model.fit <- ugarchfit(data=series[n-window:n], spec=model.spec, out.sample=out.sample)
+    parameter.estimates <- coef(model.fit)
+    residual <- residuals(model.fit)
+    return(list(model=model.fit, parameter.estimates=parameter.estimates, residual=residual, n=n, window=window))
+}
+model.out <- get.estimates(bmw, window=150)
+```
+
+
+## Risk
+
+Let us define the series $X_t$ to be the negative log-returns:
+$$
+X_t:=-\log\frac{P_t}{P_{t-1}}
+$$
+We are interested in estimating extreme conditional quantiles of these negative log-returns. We define the unconditonal quantile to be
+$$
+q_\tau = \inf\{x\in\mathbb R:F(x)\geq \tau\}
+$$
+We would like to estimate the the one-step-ahead extreme quantile associated to $X_{t+1}$ given the filtration $\mathcal F_t$ for $\tau\sim 1$. Conditioning on $\mathcal F_t$, we define the VaR:
+$$
+q_\tau(X_{t+1}|\mathcal F_t) = \mu_{t+1}+\sigma_{t+1}q_\tau(\xi)
+$$
+
+
+Before discussing the extreme VaR case, we review the basic VaR computation. All we need to compute is
+$$
+VaR(a) = \mu+\sigma N^{-1}(a)
+$$
+where $a=1-\tau$ and $N^{-1}$ generates the a-th quantile of the normal distribution. This of course is too naive an approach because log-returns are not normally distributed (as one can check with the Jarque-Bera test) and volatility is not constant. 
+```{r, fig.width=4, fig.height=2, echo=TRUE,results='hide',fig.keep='all'}
+var.naive <- function(log.ret, tau) {quantile(log.ret , 1-tau)}
+var(bmw, 0.95)
+hist <- qplot(bmw , geom = 'histogram') + 
+        geom_histogram(fill = 'lightblue' ) +
+        geom_histogram(aes(bmw[bmw < var.naive(bmw, 0.95)]) , fill = 'purple' ) +
+        labs(x = 'Daily Returns')
+rets.plot <- qplot(y = bmw , x = 1:length(bmw) , geom='point') + geom_point(colour = 'lightgrey' , size = 1)+labs(x="date", y="log returns") +
+             geom_hline(yintercept = sd(bmw)*qnorm(0.05)+mean(bmw) , colour = 'purple' , size = 1.2) + theme_light()     
+
+grid.arrange(hist, rets.plot, ncol=2)
+```
+The t-distribution is a better choice here. As the desired confidence approaches 1, the difference in the tail behavior of the two models increase. In this example the normal distribution systematially underestimates risk compared to the t-distribution for confidences of over 95%.
+```{r}
+var.t <- function(log.ret, tau, standard=FALSE)
+{
+    t.pars <- fitdist(distribution = 'std' , x = log.ret)$pars
+    if(!standard)
+    {qdist(distribution = 'std' , shape = t.pars["shape"], mu=t.pars["mu"], sigma=t.pars["sigma"],p = 1-tau)}
+    else
+    {qdist(distribution = 'std' , shape = t.pars["shape"], p = 1-tau)}
+}
+tau <- seq(0.95, 0.999, 0.001)
+
+ggplot()+
+geom_line(aes(y = var.naive(bmw, tau) , x = tau, color="normal"), lwd=1.2 ) +
+    geom_line(aes(y = var.t(bmw, tau) , x = tau, color="t"), lwd=1.2 ) +
+    theme(legend.position='bottom', text = element_text(size = 12))+
+    xlab("Confidence")+ylab("VaR")
+```
+
+Now, let's go back to the Gaussian model but incorporate stochastic volatilty:
+
+```{r}
+model.out <- get.estimates(bmw, window=0)
+sigmas <- model.out$model@fit$sigma
+standard.var.norm <- qnorm(p = 0.02)
+standard.var.t <- var.t(bmw, 0.98, standard=TRUE)
+
+
+qplot(y = bmw , x = 1:length(sigmas) , geom='point') + geom_point(colour = 'lightgrey' , size = 1)+labs(x="date", y="log returns") +
+    geom_line(aes(y = sigmas*standard.var.t, x=seq(1,length(bmw))) )+
+    geom_line(aes(y = sigmas*standard.var.norm, x=seq(1,length(bmw))), color="blue")+
+    geom_hline(yintercept = sd(bmw)*qnorm(0.01)+mean(bmw) , colour = 'purple' , size = 1.2) +    
+    labs(title="Stochastic volatility VaR(0.99)", x="Day Index")
+```
+Notice, very importantly, that while the deterministic volatility VaR appears to be an average of the stochastic VaR, the differences between the two are rater dramatic in high volatility periods. We gauge the correctness of the model by observing how well the VaR level divides the data - we want the number of exceptions to roughly match our desired confidence.
+
+### Validation and nowcast
+
+```{r}
+model.roll.moving = ugarchroll(spec = ar.garch , data = bmw , n.start = length(bmw)-500 , refit.every = 50 , refit.window = 'moving')
+var.forecast <- function(log.ret, tau, forecast.model)
+{
+    t.pars <- fitdist(distribution = 'std' , x = log.ret)$pars
+    var.out <- mean(log.ret)+forecast.model@forecast$density[,'Sigma']*qdist(distribution='std', shape=t.pars["shape"], p=1-tau)
+}
+```
+
+We can now determine the rate of VaR exceptions:
+
+```{r, warning=FALSE}
+var.95.moving <- var.forecast(bmw, 0.95, model.roll.moving)
+sum(bmw[(length(bmw)-500):length(bmw)] < var.95.moving)#/500
+```
+
+We don't directly compare this to 5% to gauge model validity, though. We assume the exceptions are binomially distributed and determine the $\tau$ confidence bounds given this exception process:
+
+```{r}
+p = c()
+n <- 500
+p[1] = pbinom(q = 0 , size = n , prob = 0.05)
+for(i in 1:50) # iterate over refit windows
+{
+    p[i] = (pbinom(q = (i-1) , size = n , prob = 0.05) - pbinom(q = (i-2) , size = n , prob = 0.05))
+}
+
+
+cat("Lower 95% confidence bound: ", min(which(qbinom(0.05, size=n, prob = p)==1)), "\n",
+    "Upper 95% confidence bound: ", max(which(qbinom(0.05, size=n, prob = p)==1)), sep="")
+```
+ We therefore conclude that with $32$ exceptions, our model falls within the 95% confidence window.
+    
+### Bias reduction
+
+...We estimate this by first obtaining $\hat\mu_{t+1}$ and $\hat \sigma_{t+1}$. Since the innovation, $\xi_t$, is unobservable, it has to be estimated from the residuals of model. Note that for $\tau\sim 1$, i.e. extreme VaR, estimating $q_\tau(Z)$ becomes numerically unstable. The classical estimator in the extreme limit is the Weissman quantile estimator:
+$$
+\bar q_{1-p}(\xi) = \left(\frac{k}{n p}\right)^{\bar \gamma_k}\xi_{n-k, n},\quad \bar\gamma_k :=\frac{1}{k}\sum_{i=1}^k\log\frac{\xi_{n-i+1, n}}{\xi_{n-k,n}}
+$$
+Here, $\xi_{i,j}$ is a Gaussian order statistics. 
+```{r}
+weissman.estimator <- function(p, params)
+{
+    z <- params$residual
+    n <- params$n
+    k <- params$window
+    gamma <- (1/k)*sum(log(z[]))
+}
+```
