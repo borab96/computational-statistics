@@ -259,7 +259,7 @@ cat("Lower 95% confidence bound: ", min(which(qbinom(0.05, size=n, prob = p)==1)
 $$
 \bar q_{1-p}(\xi) = \left(\frac{k}{n p}\right)^{\bar \gamma_k}\xi_{n-k, n},\quad \bar\gamma_k :=\frac{1}{k}\sum_{i=1}^k\log\frac{\xi_{n-i+1, n}}{\xi_{n-k,n}}
 $$
-Here, $\xi_{i,j}$ is a Gaussian order statistics. 
+Here, $\xi_{i,j}$ is a Gaussian order statistics. TODO
 ```{r}
 weissman.estimator <- function(p, params)
 {
